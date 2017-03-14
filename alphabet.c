@@ -15,9 +15,6 @@ int main(){
 		scanf("%s", word);
 		add(dictionary, word);
 	}
-	cleanUp(dictionary, 2);
-
-
 	scanf("\n");
 	char signal[1024] = { 0 };
 	for(int i = 0; i < N; i++){
@@ -27,6 +24,7 @@ int main(){
 	}
 
 	free(word);
+	cleanUp(dictionary);
 }
 
 NODE *newNode(){
@@ -39,7 +37,6 @@ NODE *newNode(){
 }
 
 int find(NODE *root, char *pattern){
-//	printf("dlugosc %s, to %d\n", pattern, strlen(pattern));
 	if(!strlen(pattern)) return 1; 
 	
 	int capabilities = 0;
@@ -57,8 +54,6 @@ int find(NODE *root, char *pattern){
 		for(int i = 1; i < exprLen - 1; i++)
 			if(root->value == pattern[i])
 			{
-				//printf("pattern: %s exprLen: %d pattern len: %d\n", pattern, exprLen, strlen(pattern));
-				//printf("val: %c pattern: %c\n", root->value, pattern[i]);
 				if(exprLen == strlen(pattern) && root->children == 0) return 1;
 				for(int j = 0; j < root->children; j++)
 					capabilities += find(root->childrenPtr[j], pattern + exprLen*sizeof(char));
@@ -107,12 +102,12 @@ int bracketLength(char *expression){
 	return length;
 }
 
-void cleanUp(NODE *root, int len){
-//	for(int i = 0; i < len; i++)
-//		printf("%c", ' ');
-//	printf("Val: %c, dzieci: %d\n", root->value, root->children);
-	for(int i = 0; i < root->children; i++)
-		cleanUp(root->childrenPtr[i], len+2);
+void cleanUp(NODE *root){
+	if(root->children > 0)
+		for(int i = 0; i < root->children; i++)
+			cleanUp(root->childrenPtr[i]);
+	free(root->childrenPtr);
+	free(root);
 }
 
 

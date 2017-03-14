@@ -13,5 +13,5 @@ typedef struct NODE{
 int find(NODE *root, char *pattern);
 int add(NODE *root, char *pattern);
 int possibilities(NODE *root, char *pattern);
-void cleanUp(NODE *root, int len);
+void cleanUp(NODE *root);
 int bracketLength(char *expression);
